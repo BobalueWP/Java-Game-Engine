@@ -179,7 +179,6 @@ public class Display {
 		window.setIconImage(icon);
 		if(undecorated) {
 			window.getRootPane().setWindowDecorationStyle(windowDecorationStyle);
-			window.setUndecorated(true);
 		}
 		window.setUndecorated(undecorated);
 		window.add(canvas);
@@ -264,13 +263,13 @@ public class Display {
 
 					lastTime = now;
 
-					while (delta_u > 1) {
+					while (delta_u >= 1) {
 						updates++;
 						Display.update(delta_u);
 						delta_u--;
 					}
 
-					if (delta_r > 1){
+					if (delta_r >= 1){
 						frames++;
 						Display.render(g);
 						repaint();
