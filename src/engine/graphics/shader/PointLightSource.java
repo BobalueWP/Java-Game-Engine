@@ -53,7 +53,7 @@ public class PointLightSource {
 	}
 	
 	private void u(int x, int y) {
-		Bounds b = new Bounds(x - radius, y - radius, radius * 2, radius * 2, 0, 0, Graphics.getWidth(), Graphics.getHeight());
+		Bounds b = new Bounds(x - radius, y - radius, 1, radius * 2, radius * 2, 0, 0, Graphics.getWidth(), Graphics.getHeight());
 
 		for (int ya = b.getMinY(); ya < b.getMaxY(); ya++) 
 			for (int xa = b.getMinX(); xa < b.getMaxX(); xa++) {

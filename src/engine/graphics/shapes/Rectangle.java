@@ -27,6 +27,8 @@ public class Rectangle extends Shape{
 			intCache.addCache();
 		}
 		rgb = Cache.getCache(id).getIntArray();
+		
+		classErr = "rect";
 	}
 
 	@Override

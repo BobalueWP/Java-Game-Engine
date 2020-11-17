@@ -116,11 +116,12 @@ public class Line extends Shape {
 					if(y0>y1)rgb = plh(x1,y1,x0,y0, rgb);
 					else rgb = plh(x0,y0,x1,y1, rgb);
 				}*/
-		
+		classErr = "line";
 	}
 
 	@Override
 	void dGraphics(Graphics2D g) {
+		if(color != null)
 		g.setColor(new java.awt.Color(color.getARGB()));
 		
 		/*if(x1 - x0 == 0) x = -1;

@@ -3,7 +3,6 @@ package engine.graphics.shader;
 import engine.main.Bounds;
 import engine.main.Vector2f;
 import engine.graphics.Graphics;
-import engine.graphics.GraphicsImage;
 
 public class Shade {
 
@@ -32,11 +31,11 @@ public class Shade {
 	public void setValue(float value) {this.value = value;}
 
 	private void u(int x, int y) {
-		Bounds b = new Bounds(x, y, width, height, 0, 0, Graphics.getWidth(), Graphics.getHeight());
+		Bounds b = new Bounds(x, y, width, height, 1, 0, 0, Graphics.getWidth(), Graphics.getHeight());
 
-		for (int ya = b.getMinY(); ya < b.getMaxY(); ya++) 
-			for (int xa = b.getMinX(); xa < b.getMaxX(); xa++)
-				GraphicsImage.getShader().setBrightness(xa, ya, value);
+		//for (int ya = b.getMinY(); ya < b.getMaxY(); ya++) 
+		//	for (int xa = b.getMinX(); xa < b.getMaxX(); xa++)
+		//		GraphicsImage.getShader().setBrightness(xa, ya, value);
 	}
 	
 	private int getX() {return (int)pos.getX();}

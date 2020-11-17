@@ -3,6 +3,9 @@ package engine.graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import engine.main.Bounds;
+import engine.main.Display;
+
 public class Render {
 
 	private int[] pixels;
@@ -13,13 +16,16 @@ public class Render {
 	private float fBrightness = 1;
 	private boolean bBrightness = true;
 	private BufferedImage image;
-	static Graphics2D g;
+	private Bounds b;
 	
 	public Render(int x, int y, int width, int height, int[] pixels, float fBrightness, boolean bBrightness) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		
+		b = new Bounds(getX(), getY(), getWidth(), getHeight(), 1, 0, 0, Graphics.getWidth(), Graphics.getHeight());
+		
 		this.pixels = pixels;
 		this.bBrightness = bBrightness;
 		this.fBrightness = fBrightness;
@@ -75,5 +81,9 @@ public class Render {
 	
 	public BufferedImage getImage() {
 		return image;
+	}
+
+	public Bounds getBounds() {
+		return b;
 	}
 }

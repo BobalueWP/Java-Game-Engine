@@ -19,17 +19,26 @@ public class FillRectangle extends Shape{
 
 			int[] rgb = new int[width * height];
 
-			if(color != null) for (int i = 0; i < rgb.length; i++) rgb[i] = color.getARGB();
+			if(color != null) 
+				for (int i = 0; i < rgb.length; i++) {
+					int dx = 0;
+					if(x<0) dx = x;
+					int x = i / width + dx;
+					int y = i % height;
+					rgb[x+y*width] = color.getARGB();
+				}
 			intCache.holdIntArray(rgb);
 			intCache.addCache();
 		}
 		
 		rgb = Cache.getCache(id).getIntArray();
+		
+		classErr = "fill rect";
 	}
 
 	@Override
 	void dGraphics(Graphics2D g) {
 		g.setColor(new Color(color.getARGB()));
 		g.fillRect(x, y, width, height);
-	}	
+	}
 }

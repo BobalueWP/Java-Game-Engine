@@ -13,16 +13,15 @@ import engine.main.Audio;
 import engine.main.Display;
 import engine.main.GameState;
 import engine.main.Image;
-import engine.main.Mouse;
 import engine.graphics.Color;
 import engine.graphics.Graphics;
-import engine.graphics.shader.PointLightSource;
 import engine.graphics.shader.Shader;
 
 public class Game extends GameState {
 
 	private Image iButton = new Image("res/buttons/mButton.png", 0, 0, 8, 8, 3, 6);
 	private Image iGrass = new Image("res/tiles/tilesheet.png", 32, 0, 16, 16);
+	private Image cIGrass = new Image("res/tiles/connected/grass.png", 0, 0, 16, 16, 16, 32);
 	private Image iStone = new Image("res/tiles/Tilesheet.png", 48, 0, 16, 16);
 	private Image iWater = new Image("res/tiles/tilesheet.png", 0, 16, 16, 16, 4, 1);
 	private Image iLava = new Image("res/tiles/tilesheet.png", 0, 32, 16, 16, 4, 1);
@@ -51,7 +50,8 @@ public class Game extends GameState {
 
 	GameTime gameTime;
 
-	PointLightSource pointLight;
+	// WIP  
+	//PointLightSource pointLight;
 	
 	public Game(String name) {
 		super(name);
@@ -65,7 +65,8 @@ public class Game extends GameState {
 		water = new AnimatedTile(iWater, 15, Color.BLUE);
 		Level.addTile(water);
 
-		grass = new NormalTile(iGrass, Color.GREEN);
+		grass = new NormalTile(cIGrass, Color.GREEN);
+		grass.setConnectedTile(true);
 		Level.addTile(grass);
 
 		stone = new NormalTile(iStone, Color.GRAY);
@@ -92,12 +93,14 @@ public class Game extends GameState {
 		window.centerToWindow();
 		
 		Shader.addPointLightSource(0, 0, 64, false);
-		pointLight = Graphics.getShader().getCurrentPointLighting();
+		// WIP
+		//pointLight = Graphics.getShader().getCurrentPointLighting();
 	}
 
 	@Override
 	public void update(double delta) {
-		pointLight.setLocation(Mouse.getX(), Mouse.getY());
+		// WIP
+		//pointLight.setLocation(Mouse.getX(), Mouse.getY());
 		
 		gameTime.update();
 
@@ -105,16 +108,16 @@ public class Game extends GameState {
 
 		if(Keyboard.isKeyPressedOnce(KeyEvent.VK_F11)) fullScreen = !fullScreen;
 
-		if(fullScreen) Display.setFullScreen();
+		if(fullScreen) Display.fullScreen();
 		else Display.windowMode();
 
-		if(Keyboard.isKeyPressed(KeyEvent.VK_A)) x-= 1;
+		if(Keyboard.isKeyPressed(KeyEvent.VK_A)) x-= (int)(1);
 
-		if(Keyboard.isKeyPressed(KeyEvent.VK_D)) x+= 1;
+		if(Keyboard.isKeyPressed(KeyEvent.VK_D)) x+= (int)(1);
 
-		if(Keyboard.isKeyPressed(KeyEvent.VK_W)) y-= 1;
+		if(Keyboard.isKeyPressed(KeyEvent.VK_W)) y-= (int)(1);
 
-		if(Keyboard.isKeyPressed(KeyEvent.VK_S)) y+= 1;
+		if(Keyboard.isKeyPressed(KeyEvent.VK_S)) y+= (int)(1);
 
 		if(Keyboard.isKeyPressed(KeyEvent.VK_1)) push(menu);
 

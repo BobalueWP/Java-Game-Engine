@@ -7,17 +7,48 @@ public class Bounds {
 	private int maxX;
 	private int maxY;
 	
-	public Bounds(int x, int y, int width, int height, int minWidth, int minHeight, int maxWidth, int maxHeight) {
-		minX = x;
-		minY = y;
-		maxX = minX + width;
-		maxY = minY + height;
+	int width;
+	int height;
+	int modifier;
+	
+	private int minW;
+	private int minH;
+	private int maxW;
+	private int maxH;
+	
+	public Bounds(int x, int y, int width, int height, int modifier, int minWidth, int minHeight, int maxWidth, int maxHeight) {
 		
-		if(minY < minWidth) minY = minWidth;
-		if(minX < minHeight) minX = minHeight;
-
-		if(maxX > maxWidth) maxX = maxWidth;
-		if(maxY > maxHeight) maxY = maxHeight;
+		minW = minWidth;
+		minH = minHeight;
+		maxW = maxWidth;
+		maxH = maxHeight;
+		
+		minX = x/modifier;
+		minY = y/modifier;
+		maxX = (x + width)/modifier;
+		maxY = (y + height)/modifier;
+		
+		this.width = width;
+		this.height = height;
+		this.modifier = modifier;
+		con();
+	}
+	
+	public void set(int x, int y) {
+		minX = x/modifier;
+		minY = y/modifier;
+		maxX = (x + width)/modifier;
+		maxY = (y + height)/modifier;
+		con();
+	}
+	
+	void con() {
+		if(minX < minW) minX = minW;
+		if(minY < minH) minY = minH;
+		if(minX > maxW) minX = maxW;
+		if(minY > maxH) minY = maxH;
+		if(maxX > maxW) maxX = maxW;
+		if(maxY > maxH) maxY = maxH;
 	}
 	
 	public int getMinX() {return minX;}

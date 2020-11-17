@@ -1,6 +1,8 @@
 package engine.graphics.shapes;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
@@ -18,7 +20,11 @@ public class Image extends Shape{
 
 	engine.main.Image img;
 	BufferedImage bImg;
-	
+
+	AffineTransform tx;
+	AffineTransform g_tx;
+	AffineTransformOp op;
+
 	public Image(engine.main.Image image, int x, int y, int width, int height) {
 		super(x, y, width, height);
 		img = image;
@@ -34,7 +40,7 @@ public class Image extends Shape{
 
 	public Image(engine.main.Image image, int x, int y) {
 		super(x, y, image.getImage().getWidth(), image.getImage().getHeight());
-		this.bImg = image.getImage();
+		bImg = image.getImage();
 		img = image;
 		type = 2;
 	}
@@ -136,10 +142,42 @@ public class Image extends Shape{
 		default:
 			break;
 		}
+
+		classErr = "image";
 	}
 
 	@Override
 	void dGraphics(Graphics2D g) {
+		//g_tx = g.getTransform();
+		
+		switch (flipType) {
+		case 0x1:
+			flipImageH();
+			break;
+		case 0x2:
+			flipImageV();
+			break;
+		case 0x3:
+			flipImage();
+			break;
+		default:
+			break;
+		}
+
+		switch (thetaType) {
+		case 90:
+			rotateImage90();
+			break;
+		case 180:
+			rotateImage180();
+			break;
+		case 270:
+			rotateImage270();
+			break;
+		default:
+			break;
+		}
+		
 		switch (type) {
 		case SCALED:
 			g.drawImage(bImg, x, y, width, height, null);
@@ -159,5 +197,105 @@ public class Image extends Shape{
 		default:
 			break;
 		}
+		
+		//g.setTransform(g_tx);
+	}
+
+	void flipImageH() {
+		String id = bImg.hashCode() + "H";		
+
+		if(Cache.getCache(id) == null) {
+			tx = AffineTransform.getScaleInstance(-1, 1);
+			tx.translate(-bImg.getWidth(null), 0);
+			op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			bImg = op.filter(bImg, null);
+
+			Cache imageCache = new Cache(id);
+
+			imageCache.holdImage(bImg);
+			imageCache.addCache();
+		} else bImg = Cache.getCache(id).getImage();
+	}
+
+	void flipImageV() {
+		String id = bImg.hashCode() + "V";		
+
+		if(Cache.getCache(id) == null) {
+			tx = AffineTransform.getScaleInstance(1, -1);
+			tx.translate(0, -bImg.getHeight(null));
+			op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			bImg = op.filter(bImg, null);
+
+			Cache imageCache = new Cache(id);
+
+			imageCache.holdImage(bImg);
+			imageCache.addCache();
+		}else bImg = Cache.getCache(id).getImage();
+	}
+
+	void flipImage() {
+		String id = bImg.hashCode() + "B";		
+
+		if(Cache.getCache(id) == null) {
+			tx = AffineTransform.getScaleInstance(-1, -1);
+			tx.translate(-bImg.getWidth(null), -bImg.getHeight(null));
+			op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			bImg = op.filter(bImg, null);
+
+			Cache imageCache = new Cache(id);
+
+			imageCache.holdImage(bImg);
+			imageCache.addCache();
+		}else bImg = Cache.getCache(id).getImage();
+	}
+
+	void rotateImage90() {
+		String id = bImg.hashCode() + "N";		
+
+		if(Cache.getCache(id) == null) {
+			double rotation = Math.toRadians(90);
+			tx = AffineTransform.getRotateInstance(rotation, width/2, height/2);
+			tx.translate(0, 0);
+			op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+			bImg = op.filter(bImg, null);
+
+			Cache imageCache = new Cache(id);
+
+			imageCache.holdImage(bImg);
+			imageCache.addCache();
+		}else bImg = Cache.getCache(id).getImage();
+	}
+	
+	void rotateImage180() {
+		String id = bImg.hashCode() + "O";		
+
+		if(Cache.getCache(id) == null) {
+			double rotation = Math.toRadians(180);
+			tx = AffineTransform.getRotateInstance(rotation, width/2, height/2);
+			tx.translate(0, 0);
+			op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+			bImg = op.filter(bImg, null);
+
+			Cache imageCache = new Cache(id);
+
+			imageCache.holdImage(bImg);
+			imageCache.addCache();
+		}else bImg = Cache.getCache(id).getImage();
+	}
+	
+	void rotateImage270() {
+		String id = bImg.hashCode() + "T";		
+
+		if(Cache.getCache(id) == null) {
+			double rotation = Math.toRadians(270);
+			tx = AffineTransform.getRotateInstance(rotation, width/2, height/2);
+			op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+			bImg = op.filter(bImg, null);
+
+			Cache imageCache = new Cache(id);
+
+			imageCache.holdImage(bImg);
+			imageCache.addCache();
+		}else bImg = Cache.getCache(id).getImage();
 	}
 }

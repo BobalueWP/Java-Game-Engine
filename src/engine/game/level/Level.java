@@ -5,7 +5,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import engine.game.level.tile.BasicTile;
 import engine.main.Vector2f;
 import engine.graphics.Graphics;
-import engine.graphics.GraphicsImage;
 
 public class Level {
 
@@ -32,10 +31,10 @@ public class Level {
 
 	public void update() {
 		Vector2f.setOffset(pos.getX(), pos.getY());
-		for (BasicTile tile : getEnumtTiles()) tile.update();
 		for (Chunk chunk : chunks) if(chunk.isWithinScreen()) chunk.update();
-		GraphicsImage.getShader().setShadeBrightness(brightness);
-		GraphicsImage.getShader().update();
+		for (BasicTile tile : getEnumtTiles()) if(tile.getAnimator() != null) tile.updateAnimator();
+		//GraphicsImage.getShader().setShadeBrightness(brightness);
+		//GraphicsImage.getShader().update();
 	}
 
 	public void renderMap(Graphics g) {

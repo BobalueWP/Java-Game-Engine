@@ -67,20 +67,30 @@ public class Text extends Shape {
 			break;
 		case 1:
 			int iWidth = img.getImages()[0].getWidth();
-
+			
 			for (int i = 0; i < str.length(); i++) {
 				int in = str.getBytes()[i];
 
 				int xa = in % 16;
 				int ya = in / 16;
-				setColor(color);
-				new Image(img.getImage(xa + ya * 16), x + (i * (iWidth)), y);
+				BufferedImage img = this.img.getImage(xa + ya * 16);
+
+				Graphics2D g2 = img.createGraphics();
+
+				g2.setComposite(AlphaComposite.SrcAtop);
+				g2.setColor(java.awt.Color.decode(color.getARGB()+""));
+				g2.fillRect(0, 0, img.getWidth(), img.getHeight());
+				g2.dispose();
+				
+				new Image(img, x + (i * (iWidth)), y).draw(renderMode, fBrightness, bBrightness);
 			}
 			break;
 			
 		default:
 			break;
 		}
+		
+		classErr = "text";
 	}
 
 	BufferedImage gImg = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -105,6 +115,7 @@ public class Text extends Shape {
 		switch (textType) {
 		case 0:
 			g.setFont(font);
+			if(color != null)
 			g.setColor(new java.awt.Color(color.getARGB()));
 			g.drawString(str, x, y+fm.getAscent());
 			break;
@@ -128,8 +139,6 @@ public class Text extends Shape {
 				g2.dispose();
 
 				g.drawImage(img, null, x + (i * (iWidth)), y);
-				
-				
 			}
 			break;
 			

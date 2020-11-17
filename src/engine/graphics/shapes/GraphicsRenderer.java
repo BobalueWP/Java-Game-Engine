@@ -17,7 +17,7 @@ public class GraphicsRenderer {
 
 	private CopyOnWriteArrayList<Render> render = new CopyOnWriteArrayList<>();
 
-	private Color color = null;
+	private Color color = Color.WHITE;
 	private Font font = new Font(Font.DIALOG_INPUT, Font.PLAIN, 12);
 
 	private float fBrightness = 1;
@@ -25,9 +25,10 @@ public class GraphicsRenderer {
 
 	private int renderMode;
 
-	public GraphicsRenderer(int renderMode, Graphics2D g) {
+	public GraphicsRenderer(int renderMode, Graphics2D g, BufferedImage GImage) {
 		this.renderMode = renderMode;
 		Shape.setG(g);
+		Shape.setGImage(GImage);
 	}
 
 	public void drawScaledImage(Image image, int x, int y, int width, int height) {
@@ -135,7 +136,8 @@ public class GraphicsRenderer {
 	}
 
 	private void reset() {
-		if(color != null) color = null;
+		//if(color == null) color = Color.WHITE;
+		if(color == Color.WHITE) color = Color.WHITE;
 		if(bBrightness != true) bBrightness = true;
 		if(fBrightness != 1) fBrightness = 1;
 	}
@@ -158,5 +160,29 @@ public class GraphicsRenderer {
 
 	public void setBrightness(boolean bBrightness) {
 		this.bBrightness = bBrightness;
+	}
+
+	public void rotate90() {
+		Shape.rotate90();
+	}
+	
+	public void rotate180() {
+		Shape.rotate180();
+	}
+	
+	public void rotate270() {
+		Shape.rotate270();
+	}
+	
+	public void scale(double sx, double sy) {
+		Shape.scale(sx, sy);
+	}
+	
+	public void translate(double tx, double ty) {
+		Shape.translate(tx, ty);
+	}
+	
+	public void flip(int flipType) {
+		Shape.flip(flipType);
 	}
 }
