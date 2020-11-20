@@ -1,13 +1,13 @@
-package engine.graphics;
+package engine.main;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
+import engine.graphics.Color;
 import engine.graphics.shader.Shader;
 import engine.graphics.shapes.GraphicsRenderer;
-import engine.main.Image;
 
 public class Graphics {
 
@@ -44,7 +44,7 @@ public class Graphics {
 	}
 
 	public void render(Graphics2D g) {
-		g.drawImage(image, 0, 0, width, height, null);
+		g.drawImage(image, Display.canvas.getX(), Display.canvas.getY(), Display.canvas.getWidth(), Display.canvas.getHeight(), null);
 		//g.drawImage(gsi.getShaderImage(), 0, 0, width, height, null);
 	}
 

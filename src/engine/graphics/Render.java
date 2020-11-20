@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import engine.main.Bounds;
 import engine.main.Display;
+import engine.main.Graphics;
 
 public class Render {
 

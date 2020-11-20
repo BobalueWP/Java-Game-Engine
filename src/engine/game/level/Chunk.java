@@ -2,9 +2,9 @@ package engine.game.level;
 
 import engine.game.level.tile.BasicTile;
 import engine.main.Bounds;
+import engine.main.Graphics;
 import engine.main.Image;
 import engine.main.Vector2f;
-import engine.graphics.Graphics;
 
 public class Chunk {
 

@@ -3,10 +3,10 @@ package engine.game.level.tile;
 import java.awt.image.BufferedImage;
 
 import engine.game.Animator;
+import engine.main.Graphics;
 import engine.main.Image;
 import engine.main.Vector2f;
 import engine.graphics.Color;
-import engine.graphics.Graphics;
 
 public class BasicTile {
 

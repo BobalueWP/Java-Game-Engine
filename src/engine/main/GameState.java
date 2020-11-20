@@ -1,7 +1,6 @@
 package engine.main;
 
 import engine.game.GameStateManager;
-import engine.graphics.Graphics;
 
 public abstract class GameState {
 

@@ -1,8 +1,8 @@
 package engine.game;
 
+import engine.main.Graphics;
 import engine.main.Vector2f;
 import engine.graphics.Color;
-import engine.graphics.Graphics;
 
 public class GameTime {
 

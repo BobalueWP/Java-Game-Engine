@@ -2,8 +2,8 @@ package engine.game;
 
 import java.util.Stack;
 
-import engine.graphics.Graphics;
 import engine.main.GameState;
+import engine.main.Graphics;
 
 public class GameStateManager {
 	

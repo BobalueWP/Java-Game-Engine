@@ -2,8 +2,6 @@ package engine.main;
 
 import java.util.Stack;
 
-import engine.graphics.Graphics;
-
 public class GameStateManager {
 	
 	public Stack<GameState> states;

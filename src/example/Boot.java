@@ -1,31 +1,29 @@
 package example;
 
 import engine.main.Display;
+import engine.main.Graphics;
 import engine.main.Image;
+
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+
+import javax.swing.JRootPane;
+
 import engine.graphics.Color;
-import engine.graphics.Graphics;
 
 public class Boot {
 
+	String title = "Game Engine";
+	BufferedImage icon = new Image("res/tiles/tilesheet.png", 32, 0, 16, 16).getImage();
+	Dimension size = new Dimension(1024, 1024);
+	int screenDevice = 0;
+	Color backgroundColor = Color.BLUE;
+	boolean undecorated = true;
+	boolean keepAspectRatio = true;
+	
 	public Boot() {
-		Display.setTitle("Game Engine");
-		
-		// this is the scale for the image that is being drawn to
-		Graphics.setScale(1.0f);
-		
-		// window size
-		Display.setSize(1024, 1024);
-		
-		// sets the default window panel
-		//Display.setWindowType(0);
-		
-		// sets your very own icon for the window.
-		Display.setIcon(new Image("res/tiles/tilesheet.png", 32, 0, 16, 16).getImage());
-		
-		//sets the screen to window mode. this is automatically set.
-		//Display.windowMode();
-		
-		Display.setBackgroundColor(Color.BLUE);
+		Graphics.setScale(0.5f); // must be set before everything else
+		Display.settup(title, icon, size, screenDevice, backgroundColor, undecorated, keepAspectRatio);
 		Display.addGameState(new Game("Game"));
 		Display.create(60);
 	}

@@ -3,11 +3,11 @@ package engine.game;
 import java.awt.image.BufferedImage;
 
 import engine.main.Font;
+import engine.main.Graphics;
 import engine.main.Image;
 import engine.main.Mouse;
 import engine.main.Vector2f;
 import engine.graphics.Color;
-import engine.graphics.Graphics;
 
 public class Button {
 
@@ -115,8 +115,8 @@ public class Button {
 		containsMouse = Mouse.contains(
 				(int)(pos.getX()), 
 				(int)(pos.getY()), 
-				(int)(bWidth), 
-				(int)(bHeight));
+				(int)(bWidth-2), 
+				(int)(bHeight-2));
 		clicked = containsMouse & Mouse.getPresses(mouseButton);
 	}
 

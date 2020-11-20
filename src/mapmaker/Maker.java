@@ -1,14 +1,15 @@
 package mapmaker;
 
 
+import java.awt.Dimension;
 import java.io.File;
 import engine.game.Button;
 import engine.game.Window;
 import engine.main.Display;
 import engine.main.GameState;
+import engine.main.Graphics;
 import engine.main.Image;
 import engine.graphics.Color;
-import engine.graphics.Graphics;
 
 public class Maker extends GameState {
 
@@ -18,11 +19,13 @@ public class Maker extends GameState {
 
 	private Window window = new Window(windowImage, "Main", 0, 0, 800, 0, 8);
 
+	String title = "Map Maker";
+	Dimension size = new Dimension(800, 600);
+	Color backgroundColor = Color.BLACK;
+	
 	public Maker(String name) {
 		super(name);
-		Display.setTitle("Map Maker");
-		Display.setSize(800, 600);
-		Display.setBackgroundColor(Color.BLACK);
+		Display.settup(title, null, size, 0, backgroundColor, true, true);
 		Display.addGameState(this);
 		Display.create(60);
 		

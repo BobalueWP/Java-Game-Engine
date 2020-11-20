@@ -2,7 +2,7 @@ package engine.game;
 
 import java.awt.image.BufferedImage;
 
-import engine.graphics.Graphics;
+import engine.main.Graphics;
 
 public class Animator {
 

@@ -12,9 +12,9 @@ import engine.game.level.tile.NormalTile;
 import engine.main.Audio;
 import engine.main.Display;
 import engine.main.GameState;
+import engine.main.Graphics;
 import engine.main.Image;
 import engine.graphics.Color;
-import engine.graphics.Graphics;
 import engine.graphics.shader.Shader;
 
 public class Game extends GameState {

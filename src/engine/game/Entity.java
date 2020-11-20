@@ -2,8 +2,8 @@ package engine.game;
 
 import java.awt.image.BufferedImage;
 
+import engine.main.Graphics;
 import engine.main.Vector2f;
-import engine.graphics.Graphics;
 
 public abstract class Entity {
 

@@ -1,8 +1,8 @@
 package engine.graphics.shader;
 
 import engine.main.Bounds;
+import engine.main.Graphics;
 import engine.main.Vector2f;
-import engine.graphics.Graphics;
 
 public class PointLightSource {
 

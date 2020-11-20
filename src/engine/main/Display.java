@@ -8,6 +8,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -18,17 +19,15 @@ import engine.game.GameStateManager;
 import engine.game.Keyboard;
 import engine.main.Mouse;
 import engine.graphics.Color;
-import engine.graphics.Graphics;
 
 public class Display {
 
 	private static JFrame window = new JFrame();
-	private static MyCanvas canvas;
+	static MyCanvas canvas;
 
 	private static boolean running;
 
 	private static int frames;
-	static double ttps = 0;
 
 	private static int fps;
 	private static int ups;
@@ -43,15 +42,16 @@ public class Display {
 
 	private static GraphicsDevice divice;
 
-	private static int windowDecorationStyle;
+	private static boolean init;
+	private static BufferedImage icon;
 
-	static boolean init;
-	static BufferedImage icon;
+	private static String title;
 
-	static String title;
-
-	static boolean undecorated = true;
+	private static boolean undecorated = true;
+	private static Dimension size;
 	
+	private static boolean keepAspectRatio = false;
+
 	static void closeOption() {
 		window.addWindowListener(new WindowAdapter() {
 			@Override
@@ -67,7 +67,7 @@ public class Display {
 		});
 	}
 
-	static void initCanvas() {
+	private static void initCanvas() {
 		canvas = new MyCanvas();
 		canvas.setBackground(java.awt.Color.BLACK);
 
@@ -80,7 +80,7 @@ public class Display {
 		canvas.addKeyListener(keyboard);
 	}
 
-	static void init() {
+	private static void init() {
 		if(!init) initCanvas();
 		init = true;
 	}
@@ -94,28 +94,50 @@ public class Display {
 	}
 
 	private static void render(Graphics2D g) {
-		graphics.setColor(Color.WHITE.changeAlpha(0));
+		graphics.setColor(backgroundColor);
 		graphics.drawFillRect(0, 0, getWidth(), getHeight());
 		gsm.render(graphics);
 		graphics.setColor(Color.WHITE);
 		graphics.setFont(Font.DIALOG, Font.BOLD, 12);
 		graphics.drawString("FPS:" + fps + " | UPS:" + ups, 0, Graphics.getHeight() - 16);
+		
+		graphics.setColor(Color.WHITE);
+		graphics.setFont(Font.DIALOG, Font.BOLD, 12);
+		graphics.drawString("x: " + Mouse.getX() + " y: " + Mouse.getY(), 0, Graphics.getHeight() - 32);
+		graphics.drawRect(Mouse.getX() - 1, Mouse.getY() - 1, 3, 3);
+		
 		graphics.render(g);
 	}
 
-	public static void setTitle(String title) {
+
+	/**
+	 * <b>Title</b> is the title of the window. <br>
+	 * <b>Icon</b> is the image displayed on the left top window and your windows tab. <br>
+	 * <b>Size</b> is the size set for your panel and not your window size. (this is depending on if you use decorated or not!). <br>
+	 * <b>Screen Device</b> is your monitor of choice. Your monitor number(your graphics card display number) is related to the number you put. <br>
+	 * <b>Background Color</b> is the color you set for the background.<br>
+	 * <b>undecorated</b> is the choice of using a border around the panel.
+	 * <b>Display Scaling Type</b> is for the full screen either you choose to stretch or keep the aspect ratio.
+	 */
+	public static void settup(String title, BufferedImage icon, Dimension size, int screenDevice, Color backgroundColor, boolean undecorated, boolean keepAspectRatio) {
+		init();
 		Display.title = title;
-		init();
-	}
-
-	public static void setIcon(BufferedImage icon) {
 		Display.icon = icon;
-		init();
-	}
+		Display.size = size;
 
-	public static void setWindowType(int windowDecorationStyle) {
-		Display.windowDecorationStyle = windowDecorationStyle;
-		if(windowDecorationStyle == 0) undecorated = false;
+		int width = (int)size.getWidth();
+		int height = (int)size.getHeight();
+		canvas.setSize(width, height);
+		canvas.setPreferredSize(new Dimension(width, height));
+		if(graphics == null) graphics = new Graphics(width, height);
+
+		divice = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[screenDevice];
+
+		Display.backgroundColor = backgroundColor;
+		
+		Display.undecorated = undecorated;
+		
+		Display.keepAspectRatio = keepAspectRatio;
 	}
 
 	public static void addGameState(GameState gameState) {
@@ -127,26 +149,13 @@ public class Display {
 		reset(undecorated);
 		frames = fps;
 		running = true;
-		window.pack();
 		canvas.start();
+		window.pack();
 	}
 
 	public static int getFps() {return fps;}
 
-	public static void setBackgroundColor(Color backgroundColor) {
-		Display.backgroundColor = backgroundColor;
-		init();
-	}
-
-	public static void setScreenDevice(int screenDivice) {
-		divice = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[screenDivice];
-	}
-
-	public static void setSize(int width, int height) {
-		canvas.setSize(width, height);
-		canvas.setPreferredSize(new Dimension(width, height));
-		if(graphics == null) graphics = new Graphics(width, height);
-	}
+	private static void setScreenDevice(int screenDevice) {divice = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[screenDevice];}
 
 	public static void windowMode() {
 		if(fullscreen) {
@@ -155,18 +164,35 @@ public class Display {
 				window.pack();
 			}
 			divice.setFullScreenWindow(null);
+			canvas.setBounds(0, 0, size.width, size.height);
 			fullscreen = false;
-			if(windowDecorationStyle != 0) window.getRootPane().setWindowDecorationStyle(windowDecorationStyle);
-
 		}
 	}
 
 	public static void fullScreen() {
 		if(!fullscreen) {
 			if(divice == null) setScreenDevice(0);
+			
 			if(!undecorated) reset(true);
+			window.pack();
+			
 			divice.setFullScreenWindow(window);
-			if(windowDecorationStyle != 0) window.getRootPane().setWindowDecorationStyle(0);
+			
+			int dWidth = divice.getDisplayMode().getWidth();
+			int dHeight = divice.getDisplayMode().getHeight();
+			
+			if(keepAspectRatio) {
+				double s = 1;
+				if(dWidth - size.width < dHeight - size.height) s = (double)(dWidth / size.getWidth());
+				if(dWidth - size.width > dHeight - size.height) s = (double)(dHeight / size.getHeight());
+				
+				int x = (int)((dWidth - size.width * s) / 2);
+				int y = (int)((dHeight - size.height * s) / 2);
+				
+				canvas.setBounds(x, y, (int)(size.getWidth() *s), (int)(size.getHeight()*s));
+
+			}
+			
 			fullscreen = true;
 		}
 	}
@@ -177,12 +203,11 @@ public class Display {
 		closeOption();
 		window.setTitle(title);
 		window.setIconImage(icon);
-		if(undecorated) {
-			window.getRootPane().setWindowDecorationStyle(windowDecorationStyle);
-		}
 		window.setUndecorated(undecorated);
 		window.add(canvas);
 		window.setVisible(true);
+		window.createBufferStrategy(2);
+		window.setBackground(new java.awt.Color(backgroundColor.getARGB()));
 	}
 
 	public static GameStateManager getGsm() {return gsm;}
@@ -196,17 +221,13 @@ public class Display {
 	public static int getHeight() {return canvas.getHeight();}
 
 	@SuppressWarnings("serial")
-	private static class MyCanvas extends JPanel implements Runnable {
+	static class MyCanvas extends JPanel implements Runnable {
 
-		private Graphics2D g;
-		private BufferedImage img;
-		private int cWidth;
-		private int cHeight;
+		BufferStrategy bs;
 
 		public MyCanvas() {
 			setFocusable(true);
 			setFocusTraversalKeysEnabled(false);
-			setDoubleBuffered(true);
 		}
 
 		@Override
@@ -223,14 +244,6 @@ public class Display {
 		}
 
 		@Override
-		public void paint(java.awt.Graphics g) {
-			super.paint(g);
-			g.drawImage(img, 0, 0, getWidth() + cWidth, getHeight() + cHeight, null);
-			Toolkit.getDefaultToolkit().sync();
-			g.dispose();
-		}
-
-		@Override
 		public void run() {
 
 			int w = getWidth();
@@ -238,9 +251,6 @@ public class Display {
 
 			if(w == 0) w = 1;
 			if(h == 0) h = 1;
-
-			img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-			g = img.createGraphics();
 
 			if(running) {
 				long lastTime = System.nanoTime();
@@ -250,6 +260,8 @@ public class Display {
 
 				double delta_u = 0;
 				double delta_r = 0;
+
+				bs = Display.window.getBufferStrategy();
 
 				while(Display.running) {
 					double nsPerUpdate_u = 1000000000 / 60;
@@ -263,7 +275,7 @@ public class Display {
 
 					lastTime = now;
 
-					while (delta_u >= 1) {
+					if (delta_u >= 1) {
 						updates++;
 						Display.update(delta_u);
 						delta_u--;
@@ -271,8 +283,21 @@ public class Display {
 
 					if (delta_r >= 1){
 						frames++;
-						Display.render(g);
-						repaint();
+						bs = Display.window.getBufferStrategy();
+
+						if (bs == null) {
+							Display.window.createBufferStrategy(2);
+							return;
+						}
+
+						Graphics2D g2 = (Graphics2D)bs.getDrawGraphics();
+						g2.clearRect(0, 0, window.getWidth(), window.getHeight());
+						if(!undecorated)g2.translate(window.getRootPane().getX(), window.getRootPane().getY());
+						Display.render(g2);
+
+						window.getToolkit().sync();
+						g2.dispose();
+						bs.show();
 						delta_r--;
 					}	
 

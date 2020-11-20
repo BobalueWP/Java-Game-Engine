@@ -2,9 +2,10 @@ package engine.game;
 
 import java.awt.image.BufferedImage;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import engine.main.Graphics;
 import engine.main.Image;
 import engine.main.Vector2f;
-import engine.graphics.Graphics;
 
 public class Window {
 

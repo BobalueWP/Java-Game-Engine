@@ -3,7 +3,7 @@ package example;
 import java.awt.event.KeyEvent;
 import engine.game.Keyboard;
 import engine.main.GameState;
-import engine.graphics.Graphics;
+import engine.main.Graphics;
 
 public class MainMenu extends GameState {
 

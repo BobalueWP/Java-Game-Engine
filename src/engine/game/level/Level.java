@@ -3,8 +3,8 @@ package engine.game.level;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import engine.game.level.tile.BasicTile;
+import engine.main.Graphics;
 import engine.main.Vector2f;
-import engine.graphics.Graphics;
 
 public class Level {
 
